@@ -14,33 +14,47 @@ class H5PRepoShortcode extends Shortcode
             // Get shortcode content and parameters
             $str = $sc->getContent();
 
-            $h5pid = $sc->getParameter('id', $sc->getBbCode());
+            $h5prepoid = $sc->getParameter('id', $sc->getBbCode());
             
             //dump($h5pid);
 
             $config = (array) $this->config->get('plugins')['h5preposhortcode'];
 
-            if ($h5pid) {
-                //$config = Grav::instance()['config'];
-                //$h5proot = $config->get('themes.' . $config->get('system.pages.theme') . '.h5pembedrootpath');
-                $h5proot = $config['h5purl'];
+            if ($h5prepoid) {
+                
+                $output =
+                
+		  "<script>
+		  (function() {
+			let h5pinstance = document.currentScript;
+			//console.log(h5pinstance);
+			let h5pContainer = document.createElement('div');
+			h5pinstance.parentNode.insertBefore(h5pContainer, null);
 
-                if (strpos($h5proot, 'h5p.com') !== false) {
-                    $output = '<p><iframe src="'.$h5proot.''.$h5pid.'/embed" width="400" height="300" frameborder="0" allowfullscreen="allowfullscreen"></iframe><script src="https://h5p.org/sites/all/modules/h5p/library/js/h5p-resizer.js" charset="UTF-8"></script></p>';
-                } else {
-                    $output = '<p><iframe src="'.$h5proot.''.$h5pid.'" width="400" height="300" frameborder="0" allowfullscreen="allowfullscreen"></iframe><script src="https://h5p.org/sites/all/modules/h5p/library/js/h5p-resizer.js" charset="UTF-8"></script></p>';
-                }
+			let h5pJsonPath = '/learn/user/data/h5pobj/".$h5prepoid."'; // H5P data directory path
+			
+			if (!document.getElementById('h5p-bundle-js')) {
+			  let script = document.createElement('script');
+			  script.id = 'h5p-bundle-js';
+			  script.src = '/learn/user/plugins/h5preposhortcode/libs/h5p/main.bundle.js';
+			  h5pContainer.parentNode.insertBefore(script, h5pContainer.nextSibling);
+			}
 
+			window.addEventListener('load', function() {
+			  const options = {
+				h5pJsonPath: h5pJsonPath,
+				frameJs: '/learn/user/plugins/h5preposhortcode/libs/h5p/frame.bundle.js',
+				frameCss: '/learn/user/plugins/h5preposhortcode/libs/h5p/styles/h5p.css',
+			  }
+			  new H5PStandalone.H5P(h5pContainer, options);
+			});
+		  }) ();
+		</script>";
+                
                 return $output;
             }
 
-            $h5purl= $sc->getParameter('url', $sc->getBbCode());
 
-            if ($h5purl) {
-                $output = '<p><iframe src="'.$h5purl.'" width="400" height="300" frameborder="0" allowfullscreen="allowfullscreen"></iframe><script src="https://h5p.org/sites/all/modules/h5p/library/js/h5p-resizer.js" charset="UTF-8"></script></p>';
-
-                return $output;
-            }
 
         });
     }
