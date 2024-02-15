@@ -1,0 +1,63 @@
+title: LTITOOL
+'@extends':
+    type: default
+    context: blueprints://pages
+
+form:
+  fields:
+    tabs:
+      type: tabs
+      active: 1
+      fields:
+        advanced:
+          fields:
+            access:
+              type: section
+              title: Access
+              underline: true
+              fields:
+                header.access.site.login:
+                  type: toggle
+                  label: Site login
+                  highlight: 1
+                  default: 1
+                  options:
+                      1: PLUGIN_ADMIN.ENABLED
+                      0: PLUGIN_ADMIN.DISABLED
+                  validate:
+                      type: bool
+        options:
+          type: tab
+          title: PLUGIN_ADMIN.OPTIONS
+          fields:
+            myfields:
+              type: section
+              title: LTI Tool
+              underline: true
+              fields:
+                header.lticonsumer:
+                  type: checkbox
+                  label: "Activate an LTI Tool"
+                  validate:
+                header.ltitool:
+                  type: select
+                  label: LTI Tool
+                  options:
+                    openochem: OpenOChem
+                    jsmolmodels: JSMolModels
+                    chemtube3d: ChemTube3D
+                    jsmollearn: JSMolLearn
+                header.ltitarget:
+                  type: select
+                  label: LTI Target
+                  options:
+                    embed: Embed in page
+                    self: Show in Current Window
+                    new: Showin New Window
+                header.cache_enable:
+                  replace@: false
+                  type: hidden
+                  default: false
+                  
+                  
+                  
